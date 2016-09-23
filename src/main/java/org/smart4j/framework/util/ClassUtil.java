@@ -3,7 +3,9 @@ package org.smart4j.framework.util;
 import java.io.File;
 import java.io.FileFilter;
 import java.net.JarURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +37,12 @@ public final class ClassUtil {
 	 */
 	public static Class<?> loadClass(String className,boolean isInitialized){
 		Class<?> cls;
+		//URLClassLoader child;
 		try {
+
+//			child = new URLClassLoader (
+//					new URL[] {new URL("file:/Users/huanghanwei/Downloads/apache-tomcat-8.0.37/lib/catalina-ant.jar")}, getClassLoader());
+			System.out.println(className);
 			cls = Class.forName(className,isInitialized, getClassLoader());
 		} catch (ClassNotFoundException e) {
 			LOGGER.error("load class failure", e);

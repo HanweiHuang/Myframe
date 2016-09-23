@@ -30,5 +30,38 @@ public final class ConfigHelper {
 		return PropsUtil.getString(CONFIG_PROPS, ConfigConstant.JDBC_URL);
 	}
 	
+	/**
+	 * get jdbc username
+	 */
+	public static String getJdbcUserName(){
+		return PropsUtil.getString(CONFIG_PROPS, ConfigConstant.JDBC_USERNAME);
+	}
 	
+	/**
+	 * get jdbc password
+	 */
+	public static String getJdbcPassword(){
+		return PropsUtil.getString(CONFIG_PROPS, ConfigConstant.JDBC_PASSWORD);
+	}
+	
+	/**
+	 * get jdbc base package
+	 */
+	public static String getAppBasePackage(){
+		return PropsUtil.getString(CONFIG_PROPS, ConfigConstant.APP_BASE_PACKAGE);
+	}
+	
+	/**
+	 * get jsp path
+	 */
+	public static String getAppJspPath(){
+		return PropsUtil.getString(CONFIG_PROPS, ConfigConstant.APP_JSP_PATH);
+	}
+	
+	/**
+	 * get app asset path
+	 */
+	public static String getAppAssetPath(){
+		return PropsUtil.getString(CONFIG_PROPS, ConfigConstant.APP_ASSET_PATH);
+	}
 }

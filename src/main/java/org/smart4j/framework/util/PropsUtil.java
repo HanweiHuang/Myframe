@@ -54,12 +54,23 @@ public final class PropsUtil {
 		return props;
 	}
 	
-	//getString, the default value is ""
+	/**
+	 * getString, the default value is ""
+	 * @param props
+	 * @param key
+	 * @return
+	 */
 	public static String getString(Properties props, String key){
 		return getString(props, key, "");
 	}
 	
-	//getString can set default value
+	/**
+	 * getString can set default value
+	 * @param props
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
 	public static String getString(Properties props, String key, String defaultValue){
 		String value = defaultValue;
 		if(props.containsKey(key)){
@@ -68,7 +79,12 @@ public final class PropsUtil {
 		return value;		
 	}
 	
-	//getInt, the default value is 0 
+	/**
+	 * getInt, the default value is 0 
+	 * @param props
+	 * @param key
+	 * @return
+	 */
 	public static int getInt(Properties props, String key){
 		return getInt(props,key,0);
 	}
@@ -81,7 +97,12 @@ public final class PropsUtil {
 		return value;
 	}
 	
-	//getBoolean, the default value is false
+	/**
+	 * getBoolean, the default value is false
+	 * @param props
+	 * @param key
+	 * @return
+	 */
 	public static boolean getBoolean(Properties props, String key){
 		return getBoolean(props, key, false);
 	}
