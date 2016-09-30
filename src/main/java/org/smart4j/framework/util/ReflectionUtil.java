@@ -1,5 +1,6 @@
 package org.smart4j.framework.util;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -59,6 +60,25 @@ public final class ReflectionUtil {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * set value for field of a class
+	 * @param obj
+	 * @param field
+	 * @param value
+	 */
+	public static void setField(Object obj, Field field, Object value){
+		try {
+			field.setAccessible(true);
+			field.set(obj, value);
+		} catch (IllegalArgumentException e) {
+			LOGGER.error("set field failture",e);
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			LOGGER.error("set field failture",e);
+			e.printStackTrace();
+		}
 	}
 	
 }
