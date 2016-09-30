@@ -16,7 +16,7 @@ import org.smart4j.framework.util.ReflectionUtil;
 public final class BeanHelper {
 
 	private static final Map<Class<?>, Object> BEANS_MAP = new HashMap<Class<?>, Object>();
-	
+	//get all beans
 	static{
 		Set<Class<?>> beanClassSet = ClassHelper.getBeanClassSet();
 		for(Class<?> beanClass: beanClassSet){
