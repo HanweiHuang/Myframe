@@ -73,10 +73,10 @@ public final class ReflectionUtil {
 			field.setAccessible(true);
 			field.set(obj, value);
 		} catch (IllegalArgumentException e) {
-			LOGGER.error("set field failture",e);
+			LOGGER.error("illegal argumment field failture",e);
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			LOGGER.error("set field failture",e);
+			LOGGER.error("access ( save check ) field failture",e);
 			e.printStackTrace();
 		}
 	}
