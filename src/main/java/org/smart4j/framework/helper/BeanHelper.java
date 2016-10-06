@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.smart4j.framework.annotation.Action;
+import org.smart4j.framework.annotation.Service;
 import org.smart4j.framework.util.ReflectionUtil;
 
 /**
@@ -20,8 +22,10 @@ public final class BeanHelper {
 	static{
 		Set<Class<?>> beanClassSet = ClassHelper.getBeanClassSet();
 		for(Class<?> beanClass: beanClassSet){
-			Object obj = ReflectionUtil.newInstance(beanClass);
-			BEANS_MAP.put(beanClass, obj);
+			//if(beanClass.isAnnotationPresent(Service.class) || beanClass.isAnnotationPresent(Action.class)){
+				Object obj = ReflectionUtil.newInstance(beanClass);
+				BEANS_MAP.put(beanClass, obj);
+			//}
 		}
 	}
 	

@@ -18,7 +18,7 @@ import org.smart4j.framework.util.ReflectionUtil;
  *
  */
 public final class IocHelper {
-	
+
 	static{
 		//1.get bean map
 		Map<Class<?>, Object> beanMap = BeanHelper.getBeanMap();
