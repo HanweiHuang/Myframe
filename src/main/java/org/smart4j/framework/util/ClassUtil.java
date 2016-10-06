@@ -30,6 +30,15 @@ public final class ClassUtil {
 	}
 	
 	/**
+	 * load class by classname
+	 * @param className
+	 * @return
+	 */
+	public static Class<?> loadClass(String className){
+		return loadClass(className,true);
+	}
+	
+	/**
 	 * reutn Class<?> obj associated with className
 	 * @param className
 	 * @param isInitialized
@@ -42,7 +51,7 @@ public final class ClassUtil {
 
 //			child = new URLClassLoader (
 //					new URL[] {new URL("file:/Users/huanghanwei/Downloads/apache-tomcat-8.0.37/lib/catalina-ant.jar")}, getClassLoader());
-			System.out.println(className);
+			System.out.println("package name:" + className);
 			cls = Class.forName(className,isInitialized, getClassLoader());
 		} catch (ClassNotFoundException e) {
 			LOGGER.error("load class failure", e);
@@ -66,7 +75,7 @@ public final class ClassUtil {
 			while(urls.hasMoreElements()){
 				URL url = urls.nextElement();
 				
-				System.out.println(url);
+				//System.out.println(url);
 				
 				if(url!=null){
 					//2.1 get type of url

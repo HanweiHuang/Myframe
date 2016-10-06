@@ -14,4 +14,18 @@ public final class StringUtil {
 	public static boolean isNotEmpty(String str){
 		return !isEmpty(str);
 	}
+	
+	/**
+	 * 
+	 * @param body
+	 * @param sign
+	 * @return
+	 */
+	public static String[] splitStream(String body, String sign){
+		String[] results = null;
+		if(StringUtil.isNotEmpty(body)&&StringUtil.isNotEmpty(sign)){		
+			results = body.split(sign);
+		}
+		return results;
+	}
 }

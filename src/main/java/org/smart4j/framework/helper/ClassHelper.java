@@ -21,7 +21,7 @@ public final class ClassHelper {
 	 */
 	static{
 		String basePackage = ConfigHelper.getAppBasePackage();
-		System.out.println(basePackage);
+		//System.out.println(basePackage);
 		CLASS_SET = ClassUtil.getClassSet(basePackage);
 	}
 	
