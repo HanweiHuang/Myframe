@@ -28,11 +28,12 @@ public final class PropsUtil {
 	public static Properties loadProps(String fileName){
 		Properties props = null;
 		InputStream is = null;
-		
 		try{
+			String t=Thread.currentThread().getContextClassLoader().getResource("").getPath(); 
+	          System.out.println("t---"+t);
 			is = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
 			if(is == null){
-				throw new FileNotFoundException(fileName + "file is not found");
+				throw new FileNotFoundException(fileName + " file is not found");
 			}
 			props = new Properties();
 			props.load(is);
