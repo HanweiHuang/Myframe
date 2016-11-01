@@ -18,7 +18,6 @@ public abstract class AspectProxy implements Proxy{
 		Method method = proxyChain.getTargetMethod();
 		Object[] params = proxyChain.getMethodParams();
 		
-		
 		begin();
 		try{
 			if(intercept(cls,method,params)){
@@ -35,7 +34,6 @@ public abstract class AspectProxy implements Proxy{
 		} finally{
 			end();
 		}
-		
 		
 		return result;
 	}

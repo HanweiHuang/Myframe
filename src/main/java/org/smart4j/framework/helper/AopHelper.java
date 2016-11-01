@@ -21,17 +21,17 @@ public final class AopHelper {
 	
 	static{
 		try{
-			//一个代理类(切面类)针对多个目标类
+			//1.一个切面类 - 多个目标类
 			Map<Class<?>, Set<Class<?>>> proxyMap = getProxyMap();
-			//一个目标类 被一个 或者个多个 代理对象封装
+			//2.一个目标类 - 对应多个切面
 			Map<Class<?>, List<Proxy>> targetMap = getTargetMap(proxyMap);
-			
+			//3.遍历每个目标类，获得对应的目标类的切面集合
 			for(Map.Entry<Class<?>, List<Proxy>> targetEntry:targetMap.entrySet()){
 				Class<?> targetClass= targetEntry.getKey();
 				List<Proxy> proxyList = targetEntry.getValue();
-				
+				//4.通过目标类和这个切面集合创建代理对象 使用adapter设计模式
 				Object proxy = ProxyManager.createProxy(targetClass, proxyList);
-				
+				//5.把目标类和代理对象存入bean中
 				BeanHelper.setBean(targetClass, proxy);
 			}
 			

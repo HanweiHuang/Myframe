@@ -97,7 +97,7 @@ public final class ClassHelper {
 	}
 	
 	/**
-	 * 获取 应用包名下父类或接口的所有字累或实现类
+	 * 获取 应用包名下父类或接口的所有子类或实现类
 	 * 使用方法 isAssignableFrom 判断加载的(类－对象) list 中是否有当前父类的子类或当前接口的实现类
 	 * @param superClass
 	 * @return
