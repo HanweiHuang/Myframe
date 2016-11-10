@@ -11,9 +11,12 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smart4j.framework.annotation.Aspect;
+import org.smart4j.framework.annotation.Service;
+import org.smart4j.framework.annotation.Transaction;
 import org.smart4j.framework.proxy.AspectProxy;
 import org.smart4j.framework.proxy.Proxy;
 import org.smart4j.framework.proxy.ProxyManager;
+import org.smart4j.framework.proxy.TransactionProxy;
 
 public final class AopHelper {
 
@@ -49,19 +52,53 @@ public final class AopHelper {
 		
 		Map<Class<?>, Set<Class<?>>> targetMap = new HashMap<Class<?>, Set<Class<?>>>();
 		//获得aspectproxy的所有的子类实现类
-		Set<Class<?>> childrenClass = ClassHelper.getClassSetBySuper(AspectProxy.class);
+//		Set<Class<?>> childrenClass = ClassHelper.getClassSetBySuper(AspectProxy.class);
+//		
+//		for(Class<?> proxyClass:childrenClass){
+//			//提取proxyClass中  注解为aspect的切面类
+//			if(proxyClass.isAnnotationPresent(Aspect.class)){
+//				Aspect aspect = proxyClass.getAnnotation(Aspect.class);
+//				//获得自类中aspect注解的类中 需要添加的aspect 的目标类
+//				Set<Class<?>> targetclassset= createTargetClassSet(aspect);
+//				targetMap.put(proxyClass, targetclassset);
+//				
+//			}
+//		}
 		
-		for(Class<?> proxyClass:childrenClass){
-			//提取proxyClass中  注解为aspect的切面类
-			if(proxyClass.isAnnotationPresent(Aspect.class)){
-				Aspect aspect = proxyClass.getAnnotation(Aspect.class);
-				//获得自类中aspect注解的类中 需要添加的aspect 的目标类
-				Set<Class<?>> targetclassset= createTargetClassSet(aspect);
-				targetMap.put(proxyClass, targetclassset);
+		getAspectMap(targetMap);
+		getTransaction(targetMap);
+		
+		return targetMap;
+	}
+	/**
+	 * add transaction to map
+	 * @param targetMap
+	 */
+	private static void getTransaction(Map<Class<?>, Set<Class<?>>> targetMap) {
+		
+		Set<Class<?>> targetClassset = ClassHelper.getClassSetByAnnotation(Service.class);
+		
+		targetMap.put(TransactionProxy.class, targetClassset);
+	}
+
+	/**
+	 * add aspects to map 
+	 * @param targetMap
+	 */
+	private static void getAspectMap(Map<Class<?>, Set<Class<?>>> targetMap){
+		Set<Class<?>> childrenClassset = new HashSet<Class<?>>();
+		
+		childrenClassset = ClassHelper.getClassSetBySuper(AspectProxy.class);
+		for(Class<?> childClass:childrenClassset){
+			if(childClass.isAnnotationPresent(Aspect.class)){
+				Aspect aspect = childClass.getAnnotation(Aspect.class);
 				
+				Set<Class<?>> targetClassset = createTargetClassSet(aspect);
+				
+				
+				targetMap.put(childClass, targetClassset);
 			}
 		}
-		return targetMap;
 	}
 
 	//通过注解Aspect 获得所有Aspect的value所表示的目标类的值
