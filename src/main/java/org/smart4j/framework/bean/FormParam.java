@@ -1,5 +1,6 @@
 package org.smart4j.framework.bean;
 
+//封装表单的单个域的一个bean
 public class FormParam {
 
 	private String fieldName;
