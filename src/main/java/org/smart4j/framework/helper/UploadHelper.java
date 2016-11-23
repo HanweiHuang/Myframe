@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -71,5 +72,14 @@ public final class UploadHelper {
 			LOGGER.error("upload file failure", e);
 			throw new RuntimeException();
 		}
+	}
+
+	/**
+	 * 添加判断是否是上传文件
+	 * @param request
+	 * @return
+	 */
+	public static boolean isMultipart(HttpServletRequest request) {
+		return ServletFileUpload.isMultipartContent(request);
 	}
 }
