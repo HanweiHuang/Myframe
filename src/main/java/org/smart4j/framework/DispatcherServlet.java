@@ -22,6 +22,8 @@ import org.smart4j.framework.bean.View;
 import org.smart4j.framework.helper.BeanHelper;
 import org.smart4j.framework.helper.ConfigHelper;
 import org.smart4j.framework.helper.ControllerHelper;
+import org.smart4j.framework.helper.RequestHelper;
+import org.smart4j.framework.helper.UploadHelper;
 import org.smart4j.framework.util.ArrayUtil;
 import org.smart4j.framework.util.CodecUtil;
 import org.smart4j.framework.util.ReflectionUtil;
@@ -38,9 +40,9 @@ public class DispatcherServlet extends HttpServlet{
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		ServletContext s1=config.getServletContext(); 
-		String temp=s1.getRealPath("/");
-		System.out.println("temp-37:"+temp);
+		//ServletContext s1=config.getServletContext(); 
+		//String temp=s1.getRealPath("/");
+		//System.out.println("temp-37:"+temp);
 		//initial helpers 
 		HelperLoader.init();
 		
@@ -53,7 +55,10 @@ public class DispatcherServlet extends HttpServlet{
 		ServletRegistration defaultServlet = servletContext.getServletRegistration("default");
 		defaultServlet.addMapping(ConfigHelper.getAppAssetPath()+"*");
 		
-		
+		/**
+		 * add uploadhelper init
+		 */
+		UploadHelper.init(servletContext);
 	}
 	
 	@Override
@@ -61,51 +66,71 @@ public class DispatcherServlet extends HttpServlet{
 		String requestMethod = request.getMethod().toLowerCase();
 		String requestPath = request.getPathInfo();
 		
+		/**
+		 * if for favicon.ico 
+		 */
+		if(requestPath.equals("/favicon.ico")){
+			return;
+		}
+		
 		Handler handler = ControllerHelper.getHandler(requestMethod, requestPath);
 		
 		if(handler!=null){
 			Class<?> controllerClass = handler.getControllerClass();
 			Object controllerBean = BeanHelper.getBean(controllerClass);
 			
-			//create request params object
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			Enumeration<String> paramNames = request.getParameterNames();
-			
-			while(paramNames.hasMoreElements()){
-				String paramName = paramNames.nextElement();
-				String paramValue = request.getParameter(paramName);
-				paramMap.put(paramName, paramValue);
+			Param param;
+			if(UploadHelper.isMultipart(request)){
+				param = UploadHelper.createParam(request);
+			}else{
+				param = RequestHelper.createParam(request);
 			}
 			
-			//deal with inputstream of params utf-8
-			String body = CodecUtil.decodeURL(StreamUtil.getString(request.getInputStream()));
+//			//create request params object
+//			Map<String, Object> paramMap = new HashMap<String, Object>();
+//			Enumeration<String> paramNames = request.getParameterNames();
+//			
+//			while(paramNames.hasMoreElements()){
+//				String paramName = paramNames.nextElement();
+//				String paramValue = request.getParameter(paramName);
+//				paramMap.put(paramName, paramValue);
+//			}
+//			
+//			//deal with inputstream of params utf-8
+//			String body = CodecUtil.decodeURL(StreamUtil.getString(request.getInputStream()));
+//			
+//			if(StringUtil.isNotEmpty(body)){
+//				String[] params = StringUtil.splitStream(body, "&");
+//				if(ArrayUtil.isNotEmpty(params)){
+//					for(String param :params){
+//						String[] array = StringUtil.splitStream(param, "=");
+//						if(ArrayUtil.isNotEmpty(array) && array.length==2){
+//							String paramName = array[0];
+//							String paraValue = array[1];
+//							paramMap.put(paramName, paraValue);
+//						}
+//					}
+//				}
+//			}
 			
-			if(StringUtil.isNotEmpty(body)){
-				String[] params = StringUtil.splitStream(body, "&");
-				if(ArrayUtil.isNotEmpty(params)){
-					for(String param :params){
-						String[] array = StringUtil.splitStream(param, "=");
-						if(ArrayUtil.isNotEmpty(array) && array.length==2){
-							String paramName = array[0];
-							String paraValue = array[1];
-							paramMap.put(paramName, paraValue);
-						}
-					}
-				}
-			}
-			
-			Param param = new Param(paramMap);
 			
 			//invoke Action's methods
+			/**
+			 * if statement for distinguishing param exists or not
+			 */
+			Object result;
 			Method actionMethod = handler.getActionMethod();
+			if(param.isEmpty()){
+				result = ReflectionUtil.invokeMethod(controllerBean, actionMethod);
+			}else{
+				result = ReflectionUtil.invokeMethod(controllerBean, actionMethod, param);
+			}
 			/**
 			 * 1.object have method
 			 * 2.method will be invoke
 			 * 3.parameters for method
 			 * return method's value
 			 */
-			Object result = ReflectionUtil.invokeMethod(controllerBean, actionMethod, param);
-			
 			if(result instanceof View){
 				View view = (View)result;
 				String path = view.getPath();
